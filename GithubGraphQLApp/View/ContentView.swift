@@ -11,6 +11,7 @@ struct ContentView: View {
     
     @State private var repositoriesDisplay: String = "latest"
     @State private var isPresented: Bool = false
+    @StateObject private var repositoryListViewModel = RepositoryListViewModel()
     
     var body: some View {
         VStack {
@@ -21,28 +22,27 @@ struct ContentView: View {
             }).pickerStyle(SegmentedPickerStyle())
             
             
-            List(1...20, id: \.self) { repository in
+            List(repositoryListViewModel.respositories, id: \.id) { repository in
                 HStack {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Name \(repository)")
+                        Text(repository.name)
                             .font(.headline)
-                        Text("Description \(repository)")
                     }
                     Spacer()
                     
+                    if repository.hasRating {
                         HStack {
-                            Text("\(repository)")
+                            Text("\(repository.starCount)")
                             Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                         }
-                    
+                    }
                 }
             }.listStyle(PlainListStyle())
         }
         .padding()
         .onAppear(perform: {
-            
-           
+            repositoryListViewModel.getLatestRepositoriesForUser(username: Constants.User.username)
         })
         .navigationBarItems(trailing: Button(action: {
             isPresented = true
