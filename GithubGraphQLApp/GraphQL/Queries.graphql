@@ -1,5 +1,13 @@
-query GetLoginInfo {
-  viewer {
-    login
+query GetRepositoriesByUserName($username: String!) {
+  user(login: $username) {
+    repositories(last: 10) {
+      nodes {
+        id
+        name
+        createdAt
+        url
+        stargazerCount
+      }
+    }
   }
 }
