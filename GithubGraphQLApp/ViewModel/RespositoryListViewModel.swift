@@ -16,7 +16,7 @@ class RepositoryListViewModel: ObservableObject {
     
     func getLatestRepositoriesForUser(username: String) {
         
-        Network.shared.apollo.fetch(query: GetRepositoriesByUserNameQuery(username: username)) { result in
+        Network.shared.apollo.fetch(query: GetRepositoriesByUserNameQuery(username: username), cachePolicy: .fetchIgnoringCacheData) { result in
             switch result {
                 case .success(let graphQLResult):
                    
