@@ -11,3 +11,15 @@ query GetRepositoriesByUserName($username: String!) {
     }
   }
 }
+
+mutation CreateRepository($name: String!, $description: String,
+$visibility:RepositoryVisibility!, $clientMutationId: String) {
+  createRepository(input: {
+    name: $name,
+    visibility: $visibility,
+    description: $description,
+    clientMutationId: $clientMutationId
+  }) {
+    clientMutationId
+  }
+}

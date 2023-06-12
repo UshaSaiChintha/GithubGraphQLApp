@@ -4,6 +4,55 @@
 import Apollo
 import Foundation
 
+/// The repository's visibility level.
+public enum RepositoryVisibility: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  /// The repository is visible only to those with explicit access.
+  case `private`
+  /// The repository is visible to everyone.
+  case `public`
+  /// The repository is visible only to users in the same business.
+  case `internal`
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "PRIVATE": self = .private
+      case "PUBLIC": self = .public
+      case "INTERNAL": self = .internal
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .private: return "PRIVATE"
+      case .public: return "PUBLIC"
+      case .internal: return "INTERNAL"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: RepositoryVisibility, rhs: RepositoryVisibility) -> Bool {
+    switch (lhs, rhs) {
+      case (.private, .private): return true
+      case (.public, .public): return true
+      case (.internal, .internal): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [RepositoryVisibility] {
+    return [
+      .private,
+      .public,
+      .internal,
+    ]
+  }
+}
+
 public final class GetRepositoriesByUserNameQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
@@ -226,6 +275,109 @@ public final class GetRepositoriesByUserNameQuery: GraphQLQuery {
               resultMap.updateValue(newValue, forKey: "stargazerCount")
             }
           }
+        }
+      }
+    }
+  }
+}
+
+public final class CreateRepositoryMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation CreateRepository($name: String!, $description: String, $visibility: RepositoryVisibility!, $clientMutationId: String) {
+      createRepository(
+        input: {name: $name, visibility: $visibility, description: $description, clientMutationId: $clientMutationId}
+      ) {
+        __typename
+        clientMutationId
+      }
+    }
+    """
+
+  public let operationName: String = "CreateRepository"
+
+  public var name: String
+  public var description: String?
+  public var visibility: RepositoryVisibility
+  public var clientMutationId: String?
+
+  public init(name: String, description: String? = nil, visibility: RepositoryVisibility, clientMutationId: String? = nil) {
+    self.name = name
+    self.description = description
+    self.visibility = visibility
+    self.clientMutationId = clientMutationId
+  }
+
+  public var variables: GraphQLMap? {
+    return ["name": name, "description": description, "visibility": visibility, "clientMutationId": clientMutationId]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("createRepository", arguments: ["input": ["name": GraphQLVariable("name"), "visibility": GraphQLVariable("visibility"), "description": GraphQLVariable("description"), "clientMutationId": GraphQLVariable("clientMutationId")]], type: .object(CreateRepository.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(createRepository: CreateRepository? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "createRepository": createRepository.flatMap { (value: CreateRepository) -> ResultMap in value.resultMap }])
+    }
+
+    /// Create a new repository.
+    public var createRepository: CreateRepository? {
+      get {
+        return (resultMap["createRepository"] as? ResultMap).flatMap { CreateRepository(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "createRepository")
+      }
+    }
+
+    public struct CreateRepository: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["CreateRepositoryPayload"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("clientMutationId", type: .scalar(String.self)),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(clientMutationId: String? = nil) {
+        self.init(unsafeResultMap: ["__typename": "CreateRepositoryPayload", "clientMutationId": clientMutationId])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// A unique identifier for the client performing the mutation.
+      public var clientMutationId: String? {
+        get {
+          return resultMap["clientMutationId"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "clientMutationId")
         }
       }
     }

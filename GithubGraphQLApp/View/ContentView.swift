@@ -50,7 +50,7 @@ struct ContentView: View {
             Image(systemName: "plus")
         }))
         .sheet(isPresented: $isPresented, onDismiss: {
-            
+            repositoryListViewModel.getLatestRepositoriesForUser(username: Constants.User.username)
         }, content: {
             AddRepositoryScreen()
         })
