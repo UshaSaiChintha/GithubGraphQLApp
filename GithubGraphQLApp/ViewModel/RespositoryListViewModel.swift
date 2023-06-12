@@ -8,11 +8,39 @@
 import Foundation
 import Apollo
 
-typealias Node = GetRepositoriesByUserNameQuery.Data.User.Repository.Node
+enum RepositoriesDisplay {
+    case latest
+    case top
+}
 
 class RepositoryListViewModel: ObservableObject {
     
     @Published var respositories: [RepositoryViewModel] = []
+    @Published var repositoriesDisplay: RepositoriesDisplay = .latest 
+    
+    func getTopRepositoriesForUser(username: String) {
+        
+        Network.shared.apollo.fetch(query: GetTopRepositoriesForUserQuery(username: username)) { result in
+            switch result {
+                case .success(let graphQLResult):
+                   
+                    guard let data = graphQLResult.data,
+                          let user = data.user,
+                          let nodes = user.repositories.nodes
+                          else {
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.respositories = nodes.compactMap { $0 }.map(RepositoryViewModel.init)
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+            }
+        }
+        
+    }
     
     func getLatestRepositoriesForUser(username: String) {
         
@@ -45,7 +73,7 @@ class RepositoryListViewModel: ObservableObject {
 
 struct RepositoryViewModel {
     
-    let node: Node
+    let node: RepositoryNode
     
     var hasRating: Bool {
         node.stargazerCount > 0
