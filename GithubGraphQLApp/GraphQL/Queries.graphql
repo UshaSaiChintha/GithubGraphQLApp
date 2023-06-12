@@ -23,3 +23,26 @@ $visibility:RepositoryVisibility!, $clientMutationId: String) {
     clientMutationId
   }
 }
+
+query GetTopRepositoriesForUser($username: String!) {
+  user(login: $username) {
+    name
+    repositories(
+      first: 10,
+      orderBy: {
+        field: STARGAZERS
+        direction: DESC
+      }
+    ) {
+      nodes {
+        id
+        name
+        createdAt
+        description
+        url
+        stargazerCount
+      }
+    }
+    
+  }
+}

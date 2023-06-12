@@ -6,19 +6,21 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     
     @State private var repositoriesDisplay: String = "latest"
     @State private var isPresented: Bool = false
     @StateObject private var repositoryListViewModel = RepositoryListViewModel()
+    @State private var cancellable: AnyCancellable?
     
     var body: some View {
         VStack {
             
-            Picker("Select", selection: $repositoriesDisplay, content: {
-                Text("Latest").tag("latest")
-                Text("Top").tag("top")
+            Picker("Select", selection: $repositoryListViewModel.repositoriesDisplay, content: {
+                Text("Latest").tag(RepositoriesDisplay.latest)
+                Text("Top").tag(RepositoriesDisplay.top)
             }).pickerStyle(SegmentedPickerStyle())
             
             
@@ -42,7 +44,17 @@ struct ContentView: View {
         }
         .padding()
         .onAppear(perform: {
-            repositoryListViewModel.getLatestRepositoriesForUser(username: Constants.User.username)
+            
+            // sink gets triggered whenver the selection is changed between latest and top. sink gets actual value of display
+            
+            self.cancellable = repositoryListViewModel.$repositoriesDisplay.sink { (display) in
+                switch display {
+                    case .latest:
+                    repositoryListViewModel.getLatestRepositoriesForUser(username: Constants.User.username)
+                    case .top:
+                    repositoryListViewModel.getTopRepositoriesForUser(username: Constants.User.username)
+                }
+            }
         })
         .navigationBarItems(trailing: Button(action: {
             isPresented = true

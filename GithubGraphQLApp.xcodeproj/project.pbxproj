@@ -29,6 +29,7 @@
 		46E4CB922A34AFE300A812A1 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4CB912A34AFE300A812A1 /* View+Extensions.swift */; };
 		46E4CB942A34AFFA00A812A1 /* Query+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4CB932A34AFFA00A812A1 /* Query+Extensions.swift */; };
 		46E4CB972A34B01800A812A1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4CB962A34B01800A812A1 /* Constants.swift */; };
+		46F93F6C2A36DEEC00A1A42E /* RepositoryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F93F6B2A36DEEC00A1A42E /* RepositoryNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		46E4CB912A34AFE300A812A1 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		46E4CB932A34AFFA00A812A1 /* Query+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Query+Extensions.swift"; sourceTree = "<group>"; };
 		46E4CB962A34B01800A812A1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		46F93F6B2A36DEEC00A1A42E /* RepositoryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		46A2C67C2A34ABCD003CEDC9 /* GithubGraphQLApp */ = {
 			isa = PBXGroup;
 			children = (
+				46F93F6A2A36DEAB00A1A42E /* Protocol */,
 				46E4CB952A34B00500A812A1 /* Utils */,
 				46E4CB902A34AFD600A812A1 /* Extensions */,
 				46E4CB892A34AF8300A812A1 /* ViewModel */,
@@ -153,6 +156,14 @@
 				46E4CB962A34B01800A812A1 /* Constants.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		46F93F6A2A36DEAB00A1A42E /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				46F93F6B2A36DEEC00A1A42E /* RepositoryNode.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +282,7 @@
 				46E4CB832A34AED500A812A1 /* API.swift in Sources */,
 				46E4CB922A34AFE300A812A1 /* View+Extensions.swift in Sources */,
 				46A2C67E2A34ABCD003CEDC9 /* GithubGraphQLAppApp.swift in Sources */,
+				46F93F6C2A36DEEC00A1A42E /* RepositoryNode.swift in Sources */,
 				46E4CB972A34B01800A812A1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

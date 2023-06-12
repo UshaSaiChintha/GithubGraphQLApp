@@ -15,7 +15,7 @@ struct Constants {
     
     struct APIKeys {
         // GitHubAccessToken check this token always
-        static let GitHubAccessToken: String = "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"
+        static let GitHubAccessToken: String = "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"
     }
     
 }
